@@ -10,8 +10,8 @@ const Post = (data) => {
     //   post
     <div className="flex flex-col p-[1rem] bg-cardColor rounded-[1rem] gap-[1rem]">
       <img
-        src={data.img}
-        alt={data.name}
+        src={data.image}
+        alt={data.imageId}
         className="w-[100%] max-h-[20rem] object-cover rounded-[0.5rem]"
       />
       {/* postReact */}

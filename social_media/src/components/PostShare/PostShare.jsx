@@ -20,11 +20,13 @@ const PostShare = () => {
     "p-[5px] px-[10px] rounded-[10px] flex items-center justify-center text-[12px] text-[16px] hover:cursor-pointer";
 
   const [image, setImage] = useState(null);
+  const [description, setDescription] = useState(true);
   const imgRef = useRef();
   const descRef = useRef();
 
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.authSlice);
+  const { loading } = useSelector((state) => state.postsSlice);
 
   const onImageChange = (e) => {
     if (e.target.files && e.target.files[0]) {
@@ -56,21 +58,25 @@ const PostShare = () => {
         console.error(e);
         dispatch(postsFail());
       });
+    reset();
   };
 
+  const reset = () => {
+    setImage(null);
+    descRef.current.value = "";
+  };
   const handleSubmit = (e) => {
     e.preventDefault();
-    const newPost = {
-      desc: descRef.current.value,
-    };
-    if (image) {
+
+    if (image && descRef.current.value !== "") {
       const data = new FormData();
       const filename = image.name;
       data.append("name", filename);
       data.append("file", image);
-      // newPost.image = filename;
       handleUploadImage(data, token);
-      // handlePost(newPost, token);
+      setDescription(true);
+    } else {
+      setDescription(false);
     }
   };
 
@@ -85,11 +91,17 @@ const PostShare = () => {
       <div className="flex flex-col w-[90%] gap-[1rem]">
         <input
           ref={descRef}
-          required
           type="text"
           placeholder="What' happning"
           className="bg-inputColor rounded-[10px] p-[10px] text-[18px] border-none outline-none"
         />
+        <span
+          className={
+            description ? "hidden" : "block text-red-500 text-[16px] mr-[5px]"
+          }
+        >
+          *Required description
+        </span>
         {/* postOption */}
         <div className="flex justify-around">
           {/* option */}
@@ -117,7 +129,7 @@ const PostShare = () => {
             type="submit"
             onClick={handleSubmit}
           >
-            Share
+            {loading ? "Uploading..." : "Share"}
           </button>
           {/* input img */}
           <div className="hidden">

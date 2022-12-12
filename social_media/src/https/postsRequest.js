@@ -1,5 +1,6 @@
 import instance from "../base/settings/axios";
 
+// create posts
 export const posts = async (data, token) => {
   let result = await instance({
     method: "POST",
@@ -13,6 +14,7 @@ export const posts = async (data, token) => {
   return result.data;
 };
 
+// upload posts
 export const postsImage = async (data, token) => {
   let result = await instance({
     method: "POST",
@@ -24,4 +26,17 @@ export const postsImage = async (data, token) => {
     data,
   });
   return result.data;
+};
+
+// get all posts
+export const getPosts = async (token) => {
+  let result = await instance({
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    url: "post",
+  });
+  return result;
 };

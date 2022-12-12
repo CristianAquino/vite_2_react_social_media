@@ -12,17 +12,17 @@ const Post = (data) => {
       <img
         src={data.image}
         alt={data.imageId}
-        className="w-[100%] max-h-[20rem] object-cover rounded-[0.5rem]"
+        className="w-[100%] max-h-[20rem] object-cover rounded-[0.5rem]  hover:cursor-pointer"
       />
       {/* postReact */}
       <div className="flex items-start text-[24px] gap-[1.5rem]">
         {data.liked ? (
-          <AiFillHeart className="text-red-500" />
+          <AiFillHeart className="text-red-500  hover:cursor-pointer" />
         ) : (
-          <AiOutlineHeart />
+          <AiOutlineHeart className="hover:cursor-pointer" />
         )}
-        <AiOutlineComment />
-        <AiOutlineShareAlt />
+        <AiOutlineComment className="hover:cursor-pointer" />
+        <AiOutlineShareAlt className="hover:cursor-pointer" />
       </div>
       <span className="text-gray text-[12px]">{data.likes} likes</span>
       {/* detail */}

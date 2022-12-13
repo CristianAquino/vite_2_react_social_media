@@ -6,9 +6,10 @@ import { PostsData } from "../../utils/postsData";
 import Post from "../Post/Post";
 
 const Posts = () => {
-  const { posts } = useSelector((state) => state.postsSlice);
+  const { posts, loading } = useSelector((state) => state.postsSlice);
   const { token } = useSelector((state) => state.authSlice);
   const dispatch = useDispatch();
+
   useEffect(() => {
     getPosts(token).then((res) => dispatch(postInitial(res.data)));
   }, []);
@@ -16,9 +17,9 @@ const Posts = () => {
   return (
     // posts
     <div className="flex flex-col gap-[1rem]">
-      {posts.map((post) => (
-        <Post key={post.id} {...post} />
-      ))}
+      {loading
+        ? "Fetching Posts..."
+        : posts.map((post) => <Post key={post.id} {...post} />)}
     </div>
   );
 };

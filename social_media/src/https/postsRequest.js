@@ -36,7 +36,7 @@ export const getPosts = async (token) => {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
-    url: "post",
+    url: "post/all",
   });
   return result;
 };

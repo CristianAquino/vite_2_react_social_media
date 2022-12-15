@@ -26,6 +26,12 @@ export const postsSlice = createSlice({
         posts: [...action.payload],
       };
     },
+    myPosts: (state, action) => {
+      return {
+        ...state,
+        myPosts: [action.payload, ...state.myPosts],
+      };
+    },
     postsFail: (state) => {
       return { ...state, loading: false, error: true };
     },
@@ -34,5 +40,5 @@ export const postsSlice = createSlice({
 
 export default postsSlice.reducer;
 
-export const { postsStart, postsSuccess, postsFail, postInitial } =
+export const { postsStart, postsSuccess, postsFail, postInitial, myPosts } =
   postsSlice.actions;

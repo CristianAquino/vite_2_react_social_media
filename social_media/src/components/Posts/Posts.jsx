@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllPosts } from "../../https/postsRequest";
-import { postInitial } from "../../redux/slice/postsSlice";
+import { useParams } from "react-router-dom";
+import { getAllPosts, getPosts } from "../../https/postsRequest";
+import { myPosts, postInitial } from "../../redux/slice/postsSlice";
 import { PostsData } from "../../utils/postsData";
 import Post from "../Post/Post";
 
@@ -9,6 +10,7 @@ const Posts = () => {
   const { posts, loading } = useSelector((state) => state.postsSlice);
   const { token } = useSelector((state) => state.authSlice);
   const dispatch = useDispatch();
+  const params = useParams();
 
   useEffect(() => {
     getAllPosts(token)
@@ -16,6 +18,13 @@ const Posts = () => {
       .catch((e) => {
         console.error(e);
       });
+    if (params.id) {
+      getPosts(token)
+        .then((res) => dispatch(postInitial(res.data)))
+        .catch((e) => {
+          console.error(e);
+        });
+    }
   }, []);
 
   return (

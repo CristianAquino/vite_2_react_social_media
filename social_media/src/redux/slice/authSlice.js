@@ -3,11 +3,11 @@ import { createSlice } from "@reduxjs/toolkit";
 export const authSlice = createSlice({
   name: "auth",
   initialState: {
-    token: JSON.parse(localStorage.getItem("token")),
+    token: JSON.parse(sessionStorage.getItem("token")),
     // token: null,
     loading: false,
     error: false,
-    user: JSON.parse(localStorage.getItem("user")),
+    user: JSON.parse(sessionStorage.getItem("user")),
     // user: null,
   },
   reducers: {
@@ -16,8 +16,8 @@ export const authSlice = createSlice({
     },
     authSuccess: (state, action) => {
       const { password, ...nuevo } = action.payload.user;
-      localStorage.setItem("token", JSON.stringify(action.payload.token));
-      localStorage.setItem("user", JSON.stringify(nuevo));
+      sessionStorage.setItem("token", JSON.stringify(action.payload.token));
+      sessionStorage.setItem("user", JSON.stringify(nuevo));
       return {
         ...state,
         token: action.payload.token,
@@ -27,7 +27,7 @@ export const authSlice = createSlice({
       };
     },
     authFail: (state) => {
-      localStorage.clear();
+      sessionStorage.clear();
       return { ...state, user: {}, loading: false, error: true };
     },
     fallowUser: (state, action) => {
@@ -39,8 +39,18 @@ export const authSlice = createSlice({
         },
       };
     },
+    updateSuccess: (state, action) => {
+      const data = action.payload;
+      sessionStorage.setItem("user", JSON.stringify(data));
+      return {
+        ...state,
+        user: { ...state.user, ...data },
+        loading: false,
+        error: false,
+      };
+    },
     logOut: (state) => {
-      localStorage.clear();
+      sessionStorage.clear();
       return {
         ...state,
         token: null,
@@ -55,4 +65,5 @@ export const authSlice = createSlice({
 
 export default authSlice.reducer;
 
-export const { authStart, authSuccess, authFail, logout } = authSlice.actions;
+export const { authStart, authSuccess, authFail, updateSuccess, logOut } =
+  authSlice.actions;

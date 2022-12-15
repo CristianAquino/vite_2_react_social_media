@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { getAllPosts, getPosts } from "../../https/postsRequest";
-import { myPosts, postInitial } from "../../redux/slice/postsSlice";
+import { postInitial } from "../../redux/slice/postsSlice";
 import { PostsData } from "../../utils/postsData";
 import Post from "../Post/Post";
 
@@ -13,13 +13,14 @@ const Posts = () => {
   const params = useParams();
 
   useEffect(() => {
-    getAllPosts(token)
-      .then((res) => dispatch(postInitial(res.data)))
-      .catch((e) => {
-        console.error(e);
-      });
     if (params.id) {
       getPosts(token)
+        .then((res) => dispatch(postInitial(res.data)))
+        .catch((e) => {
+          console.error(e);
+        });
+    } else {
+      getAllPosts(token)
         .then((res) => dispatch(postInitial(res.data)))
         .catch((e) => {
           console.error(e);

@@ -6,7 +6,7 @@ const ProfileCard = ({ location }) => {
   const hrSty = "w-[85%] border-[1px] border-hrColor";
 
   const { user } = useSelector((state) => state.authSlice);
-  const { myPosts } = useSelector((state) => state.postsSlice);
+  const { posts } = useSelector((state) => state.postsSlice);
 
   return (
     // profileCard
@@ -63,7 +63,7 @@ const ProfileCard = ({ location }) => {
               <div className="h-[100%] border-l-[2px] border-l-hrColor"></div>
               {/* follow */}
               <div className={followSty}>
-                <span className="font-bold">{myPosts.length}</span>
+                <span className="font-bold">{posts.length}</span>
                 <span className="text-gray text-[14px]">Posts</span>
               </div>
             </>

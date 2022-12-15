@@ -29,7 +29,7 @@ export const postsImage = async (data, token) => {
 };
 
 // get all posts
-export const getPosts = async (token) => {
+export const getAllPosts = async (token) => {
   let result = await instance({
     method: "GET",
     headers: {
@@ -37,6 +37,32 @@ export const getPosts = async (token) => {
       Authorization: `Bearer ${token}`,
     },
     url: "post/all",
+  });
+  return result;
+};
+
+// get posts
+export const getPosts = async (token) => {
+  let result = await instance({
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    url: "post",
+  });
+  return result;
+};
+
+// like posts
+export const likePosts = async (token, id) => {
+  let result = await instance({
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    url: `post/${id}/like`,
   });
   return result;
 };

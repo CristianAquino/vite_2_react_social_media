@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getPosts } from "../../https/postsRequest";
+import { getAllPosts } from "../../https/postsRequest";
 import { postInitial } from "../../redux/slice/postsSlice";
 import { PostsData } from "../../utils/postsData";
 import Post from "../Post/Post";
@@ -11,7 +11,11 @@ const Posts = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    getPosts(token).then((res) => dispatch(postInitial(res.data)));
+    getAllPosts(token)
+      .then((res) => dispatch(postInitial(res.data)))
+      .catch((e) => {
+        console.error(e);
+      });
   }, []);
 
   return (

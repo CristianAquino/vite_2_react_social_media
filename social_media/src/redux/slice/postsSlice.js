@@ -6,6 +6,7 @@ export const postsSlice = createSlice({
     posts: [],
     loading: false,
     error: false,
+    myPosts: [],
   },
   reducers: {
     postsStart: (state) => {

@@ -25,6 +25,7 @@ const PostShare = () => {
   const descRef = useRef();
 
   const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.authSlice);
   const { token } = useSelector((state) => state.authSlice);
   const { loading } = useSelector((state) => state.postsSlice);
 
@@ -84,7 +85,12 @@ const PostShare = () => {
     //   postShare
     <div className="flex gap-[1rem] bg-cardColor p-[1rem] rounded-[1rem]">
       <img
-        src="https://raw.githubusercontent.com/ZainRk/SocialMedia-Starter/master/src/img/profileImg.jpg"
+        src={
+          user.coverPicture
+            ? user.profilePicture
+            : "https://raw.githubusercontent.com/ZainRk/SocialMedia-Starter/master/src/img/profileImg.jpg"
+        }
+        // src="https://raw.githubusercontent.com/ZainRk/SocialMedia-Starter/master/src/img/profileImg.jpg"
         alt="profileImg"
         className="rounded-[50%] w-[3rem] h-[3rem]"
       />

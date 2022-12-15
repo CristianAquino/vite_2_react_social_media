@@ -7,7 +7,7 @@ const ProfileSide = () => {
     // profileSide overflow-auto
     <div className="flex flex-col gap-[1rem] items-center">
       <Logo />
-      <ProfileCard />
+      <ProfileCard location="homePage" />
       <FollowersCard />
     </div>
   );

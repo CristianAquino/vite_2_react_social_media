@@ -1,6 +1,12 @@
 import { Modal, useMantineTheme } from "@mantine/core";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import { postsImage } from "../../https/postsRequest";
+import { updateDataUser } from "../../https/userRequest";
+import { updateSuccess } from "../../redux/slice/authSlice";
 
-const ProfileModal = ({ modalOpened, setModalOpened }) => {
+const ProfileModal = ({ modalOpened, setModalOpened, data }) => {
   const infoInputSty =
     "border-none outline-none bg-inputColor rounded-[8px] py-[4px] px-[8px] flex-1";
 
@@ -8,6 +14,103 @@ const ProfileModal = ({ modalOpened, setModalOpened }) => {
     "flex gap-[1rem] h-[2rem] w-[100%] items-center justify-center";
 
   const theme = useMantineTheme();
+
+  const [formData, setFormData] = useState(data);
+  const [profileImage, setProfileImage] = useState(null);
+  const [coverImage, setCoverImage] = useState(null);
+  const { token, user } = useSelector((state) => state.authSlice);
+  const dispatch = useDispatch();
+  const params = useParams();
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const onImageChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      let img = e.target.files[0];
+      e.target.name === "profilePicture"
+        ? setProfileImage(img)
+        : setCoverImage(img);
+    }
+  };
+  // const onImageChangeProfile = (e) => {
+  //   if (e.target.files && e.target.files[0]) {
+  //     let img = e.target.files[0];
+  //     setProfileImage(img);
+  //   }
+  // };
+
+  // const onImageChangeCover = (e) => {
+  //   if (e.target.files && e.target.files[0]) {
+  //     let img = e.target.files[0];
+  //     setCoverImage(img);
+  //   }
+  // };
+
+  const handleUploadProfileImage = (data, token) => {
+    postsImage(data, token)
+      .then((res) => {
+        let nuevo = { ...formData };
+        nuevo.profilePicture = res.image;
+        setFormData({ ...nuevo });
+        handleUpdateUser(token, nuevo);
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+  };
+
+  const handleUploadCoverImage = (data, token) => {
+    postsImage(data, token)
+      .then((res) => {
+        let nuevo = { ...formData };
+        nuevo.coverPicture = res.image;
+        setFormData({ ...nuevo });
+        handleUpdateUser(token, nuevo);
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+  };
+
+  const handleUpdateUser = (token, data) => {
+    updateDataUser(token, data)
+      .then((res) => {
+        dispatch(updateSuccess(res.data));
+        setFormData(res.data);
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+  };
+
+  // buscar la forma de secuenciar las peticiones
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (profileImage || coverImage) {
+      if (profileImage) {
+        const data = new FormData();
+        const fileName = profileImage.name;
+        data.append("name", fileName);
+        data.append("file", profileImage);
+        handleUploadProfileImage(data, token);
+        console.log("profile");
+      }
+      if (coverImage) {
+        const data = new FormData();
+        const fileName = coverImage.name;
+        data.append("name", fileName);
+        data.append("file", coverImage);
+        handleUploadCoverImage(data, token);
+        console.log("cover");
+      }
+    } else {
+      handleUpdateUser(token, formData);
+    }
+
+    setModalOpened(false);
+  };
 
   return (
     <Modal
@@ -29,16 +132,20 @@ const ProfileModal = ({ modalOpened, setModalOpened }) => {
           {/* infoInput */}
           <input
             type="text"
-            name="firstName"
+            name="firstname"
             placeholder="First Name"
             className={infoInputSty}
+            onChange={handleChange}
+            value={formData.firstname}
           />
           {/* infoInput */}
           <input
             type="text"
-            name="lastName"
+            name="lastname"
             placeholder="Last Name"
             className={infoInputSty}
+            onChange={handleChange}
+            value={formData.lastname}
           />
         </div>
         <div className={infoInputDivSty}>
@@ -48,15 +155,19 @@ const ProfileModal = ({ modalOpened, setModalOpened }) => {
             name="worksAt"
             placeholder="Works at "
             className={infoInputSty}
+            onChange={handleChange}
+            value={formData.worksAt}
           />
         </div>
         <div className={infoInputDivSty}>
           {/* infoInput */}
           <input
             type="text"
-            name="livesIn"
+            name="livesin"
             placeholder="Lives In"
             className={infoInputSty}
+            onChange={handleChange}
+            value={formData.livesin}
           />
           {/* infoInput */}
           <input
@@ -64,22 +175,30 @@ const ProfileModal = ({ modalOpened, setModalOpened }) => {
             name="country"
             placeholder="Country"
             className={infoInputSty}
+            onChange={handleChange}
+            value={formData.country}
           />
         </div>
         <div className={infoInputDivSty}>
           <input
             type="text"
+            name="relationship"
             placeholder="RelationShip Status"
             className={infoInputSty}
+            onChange={handleChange}
+            value={formData.relationship}
           />
         </div>
         <div className={infoInputDivSty}>
           Profile Image
-          <input type="file" name="profileImg" />
+          <input type="file" name="profilePicture" onChange={onImageChange} />
           Cover Image
-          <input type="file" name="coverImg" />
+          <input type="file" name="coverPicture" onChange={onImageChange} />
         </div>
-        <button className="flex items-center justify-center self-end text-white border-none rounded-[0.5rem] bg-buttonBg h-[2rem] px-[20px] w-[6rem]hover:cursor-pointer ">
+        <button
+          className="flex items-center justify-center self-end text-white border-none rounded-[0.5rem] bg-buttonBg h-[2rem] px-[20px] w-[6rem]hover:cursor-pointer "
+          onClick={handleSubmit}
+        >
           Update
         </button>
       </form>

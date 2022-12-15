@@ -7,6 +7,7 @@ import {
   AiOutlineSetting,
   AiOutlineBell,
 } from "react-icons/ai";
+import { NavLink } from "react-router-dom";
 
 const RightSide = () => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -15,7 +16,12 @@ const RightSide = () => {
     <div className="flex flex-col gap-[2rem]">
       {/* navIcons */}
       <div className="flex text-[24px] mt-[1rem] justify-between">
-        <AiFillHome className="cursor-pointer" />
+        <NavLink
+          style={({ isActive }) => (isActive ? { color: "#f48915" } : {})}
+          to="/home"
+        >
+          <AiFillHome className="cursor-pointer" />
+        </NavLink>
         <AiOutlineSetting className="cursor-pointer" />
         <AiOutlineBell className="cursor-pointer" />
         <AiOutlineComment className="cursor-pointer" />

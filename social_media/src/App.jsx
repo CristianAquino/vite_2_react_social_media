@@ -7,6 +7,7 @@ import Auth from "./components/Auth/Auth";
 import Home from "./components/Home/Home";
 import { ProtectedRoute } from "./Routes/ProtectedRouter";
 import { useSelector } from "react-redux";
+import Profile from "./components/Profile/Profile";
 
 function App() {
   const { token } = useSelector((state) => state.authSlice);
@@ -19,6 +20,14 @@ function App() {
           element={
             <ProtectedRoute isLogged={token}>
               <Home />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile/:id"
+          element={
+            <ProtectedRoute isLogged={token}>
+              <Profile />
             </ProtectedRoute>
           }
         />

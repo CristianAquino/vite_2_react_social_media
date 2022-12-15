@@ -35,7 +35,18 @@ export const authSlice = createSlice({
         ...state,
         user: {
           ...state.user,
-          fallowing: [...state.user.fallowing, action.data],
+          following: [...state.user.following, action.payload],
+        },
+      };
+    },
+    unFallowUser: (state, action) => {
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          following: [
+            ...state.user.following.filter((id) => id !== action.payload),
+          ],
         },
       };
     },
@@ -65,5 +76,12 @@ export const authSlice = createSlice({
 
 export default authSlice.reducer;
 
-export const { authStart, authSuccess, authFail, updateSuccess, logOut } =
-  authSlice.actions;
+export const {
+  authStart,
+  authSuccess,
+  authFail,
+  fallowUser,
+  unFallowUser,
+  updateSuccess,
+  logOut,
+} = authSlice.actions;

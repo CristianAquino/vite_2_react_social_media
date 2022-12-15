@@ -31,6 +31,11 @@ export const authSlice = createSlice({
       return { ...state, user: {}, loading: false, error: true };
     },
     fallowUser: (state, action) => {
+      const a = {
+        ...state.user,
+        following: [...state.user.following, action.payload],
+      };
+      sessionStorage.setItem("user", JSON.stringify(a));
       return {
         ...state,
         user: {
@@ -40,6 +45,13 @@ export const authSlice = createSlice({
       };
     },
     unFallowUser: (state, action) => {
+      const b = {
+        ...state.user,
+        following: [
+          ...state.user.following.filter((id) => id !== action.payload),
+        ],
+      };
+      sessionStorage.setItem("user", JSON.stringify(b));
       return {
         ...state,
         user: {

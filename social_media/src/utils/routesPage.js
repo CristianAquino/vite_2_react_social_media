@@ -3,6 +3,7 @@ const routes = {
   landingPageMusic: "/landingPageMusic",
   landingPageFitnes: "/landingPageFitnes",
   socialMedia: "/socialMedia",
+  chat: "/chat",
   error: "*",
 };
 

@@ -90,7 +90,6 @@ const PostShare = () => {
             ? user.profilePicture
             : "https://raw.githubusercontent.com/ZainRk/SocialMedia-Starter/master/src/img/profileImg.jpg"
         }
-        // src="https://raw.githubusercontent.com/ZainRk/SocialMedia-Starter/master/src/img/profileImg.jpg"
         alt="profileImg"
         className="rounded-[50%] w-[3rem] h-[3rem]"
       />

@@ -1,13 +1,14 @@
 // import "./App.css";
 
 import { Navigate, Route, Routes } from "react-router-dom";
-import routes from "./utils/routesPage";
-import SocialMedia from "./pages/SocialMedia";
-import Auth from "./components/Auth/Auth";
-import Home from "./components/Home/Home";
 import { ProtectedRoute } from "./Routes/ProtectedRouter";
 import { useSelector } from "react-redux";
-import Profile from "./components/Profile/Profile";
+import routes from "./utils/routesPage";
+import SocialMedia from "./pages/SocialMedia";
+import Auth from "./pages/Auth/Auth";
+import Home from "./pages/Home/Home";
+import Profile from "./pages/Profile/Profile";
+import Chat from "./pages/Chat/Chat";
 
 function App() {
   const { token } = useSelector((state) => state.authSlice);
@@ -28,6 +29,14 @@ function App() {
           element={
             <ProtectedRoute isLogged={token}>
               <Profile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path={routes.chat}
+          element={
+            <ProtectedRoute isLogged={token}>
+              <Chat />
             </ProtectedRoute>
           }
         />

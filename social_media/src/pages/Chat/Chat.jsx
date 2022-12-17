@@ -25,12 +25,9 @@ const Chat = () => {
   }, [user]);
 
   const handleCurrentChat = (chat) => {
-    console.log("handle", chat);
     if (chat) {
       setCurrentChat(chat);
-      console.log("set", currentChat);
     }
-    console.log("if-out", currentChat);
   };
 
   return (
@@ -41,7 +38,7 @@ const Chat = () => {
         <Logo />
         {/* chat container */}
         <div className="flex flex-col gap-[1rem] bg-cardColor rounded-[1rem] p-[1rem] h-[87vh] overflow-scroll none-scroll">
-          <h2 className="text-bold text-[24px]">Chats</h2>
+          <h2 className="font-bold text-[24px]">Chats</h2>
           {/* chat list */}
           <div className="flex flex-col gap-[1rem]">
             {chats.map((chat) => (

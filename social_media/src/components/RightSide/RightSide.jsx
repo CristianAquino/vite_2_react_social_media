@@ -24,7 +24,12 @@ const RightSide = () => {
         </NavLink>
         <AiOutlineSetting className="cursor-pointer" />
         <AiOutlineBell className="cursor-pointer" />
-        <AiOutlineComment className="cursor-pointer" />
+        <NavLink
+          style={({ isActive }) => (isActive ? { color: "#f48915" } : {})}
+          to="/chat"
+        >
+          <AiOutlineComment className="cursor-pointer" />
+        </NavLink>
       </div>
       <TrendCard />
       <button

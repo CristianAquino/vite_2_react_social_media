@@ -1,6 +1,6 @@
 import instance from "../base/settings/axios";
 
-// get data
+// get me data
 export const getDataUser = async (token) => {
   let result = await instance({
     method: "GET",
@@ -11,6 +11,19 @@ export const getDataUser = async (token) => {
     url: "user",
   });
   return result;
+};
+
+// get data for id
+export const getDataUserId = async (token, id) => {
+  let result = await instance({
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    url: `user/${id}`,
+  });
+  return result.data;
 };
 
 // update data

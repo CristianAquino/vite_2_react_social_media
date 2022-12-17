@@ -26,6 +26,7 @@ module.exports = {
       backgroundImage: {
         planCard: "var(--planCard)",
         buttonBg: "var(--buttonBg)",
+        yourMessage: "var(--yourMessage)",
       },
       backgroundSize: {
         "100%": "100%",

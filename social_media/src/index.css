@@ -25,6 +25,7 @@
   --video: #4a4eb7;
   --location: #ef5757;
   --shedule: #e1ae4a;
+  --yourMessage: linear-gradient(98.63deg, #24e4f0 0%, #358ff9 100%);
   /* --sIcon: linear-gradient(106.23deg, #f99827) */
 }
 .stroke-text {

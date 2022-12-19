@@ -24,6 +24,7 @@
     "react-router-dom": "6.4.4",
     "react-scroll": "1.8.8",
     "react-visibility-sensor": "5.1.1",
+    "socket.io-client": "4.5.4",
     "timeago.js": "4.0.2"
   },
   "devDependencies": {

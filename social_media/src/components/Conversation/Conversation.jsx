@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import { getDataUserId } from "../../https/userRequest";
 
-const Conversation = ({ data, currentUserId, token }) => {
+const Conversation = ({ data, currentUserId, token, online }) => {
   const [userData, setUserData] = useState(null);
 
   useEffect(() => {
@@ -20,7 +20,11 @@ const Conversation = ({ data, currentUserId, token }) => {
       {/* follower conversation */}
       <div className="flex justify-between items-center rounded-[0.5rem] p-[10px] hover:bg-[#80808038] hover:cursor-pointer">
         <div className="relative flex gap-[10px]">
-          <div className="bg-[greenyellow] rounded-[50%] absolute left-[2rem] w-[1rem] h-[1rem]"></div>
+          {/* online dot */}
+          {online && (
+            <div className="bg-[greenyellow] rounded-[50%] absolute left-[2rem] w-[1rem] h-[1rem]"></div>
+          )}
+
           <img
             src={
               userData?.profilePicture
@@ -33,7 +37,7 @@ const Conversation = ({ data, currentUserId, token }) => {
           {/* name */}
           <div className="flex flex-col items-start justify-center text-[0.8rem]">
             <span className="font-bold">{userData?.username}</span>
-            <span>Online</span>
+            <span>{online ? "Online" : "Offline"}</span>
           </div>
         </div>
       </div>

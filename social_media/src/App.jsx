@@ -9,6 +9,9 @@ import Auth from "./pages/Auth/Auth";
 import Home from "./pages/Home/Home";
 import Profile from "./pages/Profile/Profile";
 import Chat from "./pages/Chat/Chat";
+// import io from "socket.io-client";
+
+// const socket = io("http://localhost:4000");
 
 function App() {
   const { token } = useSelector((state) => state.authSlice);

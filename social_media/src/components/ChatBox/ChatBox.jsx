@@ -1,20 +1,33 @@
 import { useEffect } from "react";
 import { useState } from "react";
-import { getMessage } from "../../https/messageRequest";
+import { createdMessage, getMessage } from "../../https/messageRequest";
 import { getDataUserId } from "../../https/userRequest";
 import { format } from "timeago.js";
 import InputEmoji from "react-input-emoji";
 import { AiOutlineSend } from "react-icons/ai";
+import { useRef } from "react";
 
-const ChatBox = ({ chat, currentUser, token }) => {
+const ChatBox = ({
+  chat,
+  currentUser,
+  setSendMessage,
+  recieveMessage,
+  token,
+}) => {
   const [userData, setUserData] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessages, setNewMessages] = useState("");
+  const refScroll = useRef();
 
   const messageSty =
-    "bg-buttonBg text-white p-[0.7rem] rounded-[1rem_1rem_1rem_0rem] max-w-[28rem] flex flex-col gap-[0.5rem]";
+    "bg-buttonBg text-white p-[0.7rem] rounded-[1rem_1rem_1rem_0rem] max-w-[28rem] w-fit flex flex-col gap-[0.5rem]";
   const ownSty = "self-end rounded-[1rem_1rem_0rem_1rem] bg-yourMessage";
 
+  const handleChange = (newMessage) => {
+    setNewMessages(newMessage);
+  };
+
+  // fetching data
   useEffect(() => {
     const userId = chat?.members?.find((id) => id !== currentUser);
     if (chat) {
@@ -34,9 +47,55 @@ const ChatBox = ({ chat, currentUser, token }) => {
     }
   }, [chat]);
 
-  const handleChange = (newMessage) => {
-    setNewMessages(newMessage);
+  const handleSend = (e) => {
+    e.preventDefault();
+    const message = {
+      senderId: currentUser,
+      text: newMessages,
+      chatId: chat.id,
+    };
+
+    // send message
+    const receiverId = chat.members.find((id) => id !== currentUser);
+    setSendMessage({ ...message, receiverId });
+
+    createdMessage(token, message)
+      .then((res) => {
+        setMessages([...messages, res]);
+        setNewMessages("");
+      })
+      .catch((e) => console.log(e));
   };
+
+  const handleOnEnter = (text) => {
+    const message = {
+      senderId: currentUser,
+      text: text,
+      chatId: chat.id,
+    };
+
+    // send message
+    const receiverId = chat.members.find((id) => id !== currentUser);
+    setSendMessage({ ...message, receiverId });
+
+    createdMessage(token, message)
+      .then((res) => {
+        setMessages([...messages, res]);
+        setNewMessages("");
+      })
+      .catch((e) => console.log(e));
+  };
+
+  useEffect(() => {
+    if (recieveMessage !== null && recieveMessage.chatId === chat.id) {
+      setMessages([...messages, recieveMessage]);
+    }
+  }, [recieveMessage]);
+
+  // scroll last message
+  useEffect(() => {
+    refScroll.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   return (
     <>
@@ -49,7 +108,6 @@ const ChatBox = ({ chat, currentUser, token }) => {
               {/* follower */}
               <div className="flex justify-between items-center">
                 <div className="relative flex gap-[10px]">
-                  <div className="bg-[greenyellow] rounded-[50%] absolute left-[2rem] w-[1rem] h-[1rem]"></div>
                   <img
                     src={
                       userData?.profilePicture
@@ -72,6 +130,7 @@ const ChatBox = ({ chat, currentUser, token }) => {
             <div className="flex flex-col gap-[0.5rem] p-[1.5rem] overflow-scroll none-scroll">
               {messages.map((message) => (
                 <div
+                  ref={refScroll}
                   key={message.id}
                   className={
                     message.senderId === currentUser
@@ -96,10 +155,14 @@ const ChatBox = ({ chat, currentUser, token }) => {
                 onChange={handleChange}
                 cleanOnEnter
                 maxLength={200}
+                onEnter={handleOnEnter}
                 placeholder="Type a message"
               />
               {/* send-button */}
-              <AiOutlineSend className="text-[1.5rem] absolute right-[64px] hover:cursor-pointer z-[10] hover:text-orange" />
+              <AiOutlineSend
+                className="text-[1.5rem] absolute right-[64px] hover:cursor-pointer z-[10] hover:text-orange"
+                onClick={handleSend}
+              />
             </div>
           </>
         ) : (

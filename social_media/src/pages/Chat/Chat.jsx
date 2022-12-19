@@ -12,11 +12,43 @@ import {
   AiOutlineBell,
 } from "react-icons/ai";
 import { NavLink } from "react-router-dom";
+import io from "socket.io-client";
 
 const Chat = () => {
   const { token, user } = useSelector((state) => state.authSlice);
   const [chats, setChats] = useState([]);
   const [currentChat, setCurrentChat] = useState(null);
+  const [onliUsers, setOnliUsers] = useState([]);
+  const [sendMessage, setSendMessage] = useState(null);
+  const [recieveMessage, setRecieveMessage] = useState(null);
+  const socket = io("http://localhost:4000");
+
+  const handleCurrentChat = (chat) => {
+    if (chat) {
+      setCurrentChat(chat);
+    }
+  };
+
+  useEffect(() => {
+    socket.emit("new-user-add", user.id);
+    socket.on("get-users", (users) => {
+      setOnliUsers(users);
+    });
+  }, [user]);
+
+  // sending message to socket server
+  useEffect(() => {
+    if (sendMessage !== null) {
+      socket.emit("send-message", sendMessage);
+    }
+  }, [sendMessage]);
+
+  // receive message to socket server
+  useEffect(() => {
+    socket.on("receive-message", (data) => {
+      setRecieveMessage(data);
+    });
+  }, []);
 
   useEffect(() => {
     getChat(token)
@@ -24,10 +56,10 @@ const Chat = () => {
       .catch((e) => console.log(e));
   }, [user]);
 
-  const handleCurrentChat = (chat) => {
-    if (chat) {
-      setCurrentChat(chat);
-    }
+  const checkOnlineStatus = (chat) => {
+    const chatMember = chat.members.find((member) => member !== user.id);
+    const online = onliUsers.find((user) => user.userId === chatMember);
+    return online ? true : false;
   };
 
   return (
@@ -47,6 +79,7 @@ const Chat = () => {
                   data={chat}
                   currentUserId={user.id}
                   token={token}
+                  online={checkOnlineStatus(chat)}
                 />
               </div>
             ))}
@@ -75,7 +108,13 @@ const Chat = () => {
           </div>
         </div>
         {/* chat body */}
-        <ChatBox chat={currentChat} currentUser={user.id} token={token} />
+        <ChatBox
+          chat={currentChat}
+          currentUser={user.id}
+          token={token}
+          setSendMessage={setSendMessage}
+          recieveMessage={recieveMessage}
+        />
       </div>
     </div>
   );

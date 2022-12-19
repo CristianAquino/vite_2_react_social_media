@@ -1,7 +1,7 @@
 import instance from "../base/settings/axios";
 
 // create chat
-export const chat = async (token, data) => {
+export const createdChat = async (token, data) => {
   let result = await instance({
     method: "POST",
     headers: {
